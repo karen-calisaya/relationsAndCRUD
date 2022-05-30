@@ -15,9 +15,12 @@ const Actors = db.Actor;
 
 const moviesController = {
     'list': (req, res) => {
-        db.Movie.findAll()
+        db.Movie.findAll({
+            include: [{association: 'actors'}]
+        })
             .then(movies => {
-                res.render('moviesList.ejs', {movies})
+                res.send(movies)
+              /*   res.render('moviesList.ejs', {movies}) */
             })
     },
     'detail': (req, res) => {
