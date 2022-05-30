@@ -2,7 +2,8 @@ const path = require('path');
 const db = require('../database/models');
 const sequelize = db.sequelize;
 const { Op } = require("sequelize");
-const {validationResult} = require('express-validator')
+const {validationResult} = require('express-validator');
+const { title } = require('process');
 
 
 //Aqui tienen una forma de llamar a cada uno de los modelos
@@ -90,6 +91,25 @@ const moviesController = {
         .catch((error) => res.send(error))
     },
     update: function (req, res) {
+        let errors = validationResult(req)
+        if(errors.isEmpty){
+            db.Movie.update({
+                title: req.body.title,
+                rating: req.body.rating,
+                awards: req.body.awards,
+                release_date: req.body.release_date,
+                length: req.body.length,
+                genre_id: req.body.genre_id
+            }, {
+                where: {     /* VITAL! para no modificar toda la tabla */
+                    id: req.params.id
+                }
+            })
+            .then((Movie) => res.redirect('/movies', {Movie}))
+            .catch((error) => res.send(error))
+        }else{
+            res.render('moviesEdit', {errors})
+        }
 
     },
     delete: function (req, res) {
