@@ -13,7 +13,7 @@ router.get('/movies/add', moviesController.add);
 router.post('/movies/create', moviesValidator, moviesController.create);
 router.get('/movies/edit/:id', moviesController.edit); /* solo envia formulario, con los datos de la pelicula  */
 router.put('/movies/update/:id', moviesController.update);
-//router.get('/movies/delete/:id', moviesController.delete);
-//router.post('/movies/delete/:id', moviesController.destroy);
+router.get('/movies/delete/:id', moviesController.delete);
+router.delete('/movies/delete/:id', moviesController.destroy);
 
 module.exports = router;

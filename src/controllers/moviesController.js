@@ -105,7 +105,7 @@ const moviesController = {
                     id: req.params.id
                 }
             })
-            .then((Movie) => res.redirect('/movies', {Movie}))
+            .then(() => res.redirect('/movies')) /* no pasamos la varible Movie,xq ya la tiene */
             .catch((error) => res.send(error))
         }else{
             res.render('moviesEdit', {errors})
@@ -113,10 +113,18 @@ const moviesController = {
 
     },
     delete: function (req, res) {
+        db.Movie.findByPk(req.params.id)
+        .then((Movie)=> res.render('moviesDelete', {Movie}))
+        .catch((error) => res.send(error))
 
     },
     destroy: function (req, res) {
- 
+        db.Movie.destroy({
+            where: {id: req.params.id}
+        })
+        .then(() => res.send())
+        .catch((error) => res.send(error))
+        res.redirect('/movies')
     }
 }
 
