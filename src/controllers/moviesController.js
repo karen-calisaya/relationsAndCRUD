@@ -61,7 +61,7 @@ const moviesController = {
         })
         .catch((error) => res.send(error));
     },
-    create: function (req,res) {
+    create: function (req, res) {
         let errors = validationResult(req);
         if(errors.isEmpty){
             db.Movie.create({
@@ -79,17 +79,24 @@ const moviesController = {
         }
 
     },
-    edit: function(req,res) {
+    edit: function(req, res) {
+        /* aca necesitamos la pelicula a editar, y a su vez pasarle todos los generos */
+        const promiseGenres = db.Genre.findAll() /* en esta valiable guardamos la consulta a la dbGenre */
+        const promiseMovie = db.Movie.findByPk(req.params.id) /* aca guardamos la consulta a la dvMovie */
+        Promise.all([promiseGenres, promiseMovie]) /* promise.all me permite lanzar todas las promesas */
+        .then(([allGenres, Movie]) => {
+            res.render('moviesEdit', {allGenres, Movie})
+        })
+        .catch((error) => res.send(error))
+    },
+    update: function (req, res) {
 
     },
-    update: function (req,res) {
+    delete: function (req, res) {
 
     },
-    delete: function (req,res) {
-
-    },
-    destroy: function (req,res) {
-
+    destroy: function (req, res) {
+ 
     }
 }
 
