@@ -2,6 +2,7 @@ const path = require('path');
 const db = require('../database/models');
 const sequelize = db.sequelize;
 const { Op } = require("sequelize");
+const {validationResult} = require('express-validator')
 
 
 //Aqui tienen una forma de llamar a cada uno de los modelos
@@ -16,11 +17,10 @@ const Actors = db.Actor;
 const moviesController = {
     'list': (req, res) => {
         db.Movie.findAll({
-            include: [{association: 'actors'}]
+            include: [{association: 'actors'}, {association: 'genre'}]
         })
             .then(movies => {
-                res.send(movies)
-              /*   res.render('moviesList.ejs', {movies}) */
+              res.render('moviesList.ejs', {movies}) 
             })
     },
     'detail': (req, res) => {
@@ -54,10 +54,29 @@ const moviesController = {
             });
     },
     //Aqui dispongo las rutas para trabajar con el CRUD
-    add: function (req, res) {
-        
+    add: function (req, res) {  /* como quiero tambien 'consumir' los datos de la tabla de generos, consulto a genre */
+        db.Genre.findAll()
+        .then((allGenres) => {
+            res.render('moviesAdd', {allGenres})
+        })
+        .catch((error) => res.send(error));
     },
     create: function (req,res) {
+        let errors = validationResult(req);
+        if(errors.isEmpty){
+            db.Movie.create({
+                title: req.body.title,
+                rating: req.body.rating,
+                awards: req.body.awards,
+                release_date: req.body.release_date,
+                length: req.body.length,
+                genre_id: req.body.genre_id
+            })
+            .then((movie) => res.redirect('/movies'))
+            .catch((error) => res.send(error))
+        }else{
+            res.render('moviesAdd', {errors})
+        }
 
     },
     edit: function(req,res) {
