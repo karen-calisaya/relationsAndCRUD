@@ -49,5 +49,9 @@ module.exports = {
         }, {
             where : {id: req.params.id}
         })
+    },
+    delete: (req, res) => {
+        db.Actor.findByPk(req.params.id)
+        .then((actor) => res.render('actorsDelete', {actor}))
     }
 }
