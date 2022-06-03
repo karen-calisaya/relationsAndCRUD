@@ -1,6 +1,7 @@
 const db = require('../database/models');
 const {Op} = require('sequelize');
 const {validationResult} = require('express-validator');
+const res = require('express/lib/response');
 
 
 
@@ -34,7 +35,19 @@ module.exports = {
         }else{
             res.render('actorsAdd', {errors})
         }
+    },
+    edit: (req, res) => {
+        db.Actor.findByPk(req.params.id)
+        .then((actor) => res.render ('actorsEdit', {actor}))
+        .catch((error) => res.send(error))
+    },
+    update: (req, res) => {
+        db.Actor.update({
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            rating: req.body.rating
+        }, {
+            where : {id: req.params.id}
+        })
     }
-
-
 }
