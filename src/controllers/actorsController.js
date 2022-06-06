@@ -42,13 +42,18 @@ module.exports = {
         .catch((error) => res.send(error))
     },
     update: (req, res) => {
+        let errors = validationResult(req)  /* COMPLETAR */
         db.Actor.update({
             first_name: req.body.first_name,
             last_name: req.body.last_name,
             rating: req.body.rating
         }, {
-            where : {id: req.params.id}
+            where : {
+                id: req.params.id
+            }
         })
+        .then(() => res.redirect('/actors'))
+        .catch((error) => res.send(error))
     },
     delete: (req, res) => {
         db.Actor.findByPk(req.params.id)

@@ -64,7 +64,7 @@ const moviesController = {
     },
     create: function (req, res) {
         let errors = validationResult(req);
-        if(errors.isEmpty){
+        if(errors.isEmpty()){
             db.Movie.create({
                 title: req.body.title,
                 rating: req.body.rating,
@@ -92,7 +92,7 @@ const moviesController = {
     },
     update: function (req, res) {
         let errors = validationResult(req)
-        if(errors.isEmpty){
+        if(errors.isEmpty()){
             db.Movie.update({
                 title: req.body.title,
                 rating: req.body.rating,
