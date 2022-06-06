@@ -1,7 +1,6 @@
 const db = require('../database/models');
 const {Op} = require('sequelize');
 const {validationResult} = require('express-validator');
-const res = require('express/lib/response');
 
 
 
@@ -23,7 +22,7 @@ module.exports = {
     },
     create: (req, res) => {
         let errors = validationResult(req)
-        if(errors.isEmpty){
+        if(errors.isEmpty()){
             db.Actor.create({
                 first_name: req.body.first_name,
                 last_name: req.body.last_name,
